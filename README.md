@@ -27,4 +27,4 @@ A REST API to track and analyze job applications using FastAPI and AI-powered in
 1. Clone the repo
 2. Install dependencies: `pip install -r requirements.txt`
 3. Add a `.env` file with your `GEMINI_API_KEY`
-4. Run: `python FastAPI.py`
+4. Run: `python Main.py`
