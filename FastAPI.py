@@ -3,7 +3,13 @@ from pydantic import BaseModel, ConfigDict
 from datetime import date
 from sqlalchemy import create_engine, Column, String, Date, Integer
 from sqlalchemy.orm import declarative_base, sessionmaker
+from dotenv import load_dotenv
+from google import genai
+import os
 import uvicorn
+
+load_dotenv()
+client = genai.Client(api_key=os.getenv("GENAI_API_KEY"))
 
 # DB setup
 DATABASE_URL = "sqlite:///./AppDatabase.db"
@@ -100,6 +106,31 @@ def delete_application(app_id: int):
     db.close()
 
     return {"message": "Application deleted successfully"}
-        
+
+@app.post("/applications/analyze")
+def analyze_applications():
+    db = SessionLocal()
+    apps = db.query(AppList).all()
+    db.close()
+
+    if not apps:
+        raise HTTPException(status_code=404, detail="No applications found")
+    
+    apps_prompt = "\n".join([f" -company: {i.Company}, role: {i.Role}, date applied: {i.Date_Applied}, status: {i.Status}" for i in apps])
+
+    message = client.models.generate_content(
+        model="gemini-3-flash-preview",
+        contents=f"""You are a career coach analyzing someone's job application history.
+                
+Here are their applications:
+{apps_prompt}
+
+Give them 3-5 specific, honest insights about their job search. 
+Be direct and practical. Point out patterns, problems, and suggestions.
+Be straight forward and logical, tell me it is what it is."""
+    )
+
+    return {"analysis": message.text}
+
 if __name__ == "__main__": 
     uvicorn.run(app, host="0.0.0.0", port=8000)
