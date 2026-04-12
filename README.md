@@ -80,7 +80,7 @@ GEMINI_API_KEY=your_key_here
 
 **4. Run**
 ```bash
-python FastAPI.py
+python Main.py
 ```
 
 API is live at `http://localhost:8000`
