@@ -86,7 +86,7 @@ def update_status(app_id: int, new_status: str):
         db.close()
         raise HTTPException(status_code=404, detail="Application not found")
     
-    db_id.Status = new_status
+    db_id.Status = new_status # type: ignore
     db.commit()
     db.close()
 
