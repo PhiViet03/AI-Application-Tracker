@@ -2,7 +2,7 @@
 
 A REST API to track and analyze job applications — built with FastAPI, SQLAlchemy, and Google Gemini AI.
 
-🚀 **Live API:** https://ai-application-tracker-w93i.onrender.com
+**Live API:** https://ai-application-tracker-w93i.onrender.com
 
 ---
 
